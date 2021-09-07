@@ -1,0 +1,5 @@
+{
+  "entrypoint": "mom.minecraft.momstruct.extension.MomStructExtension",
+  "name": "MomStructExtension",
+  "version": "1.0.0"
+}

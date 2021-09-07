@@ -1,0 +1,2 @@
+rootProject.name = 'MomStruct'
+include 'MomStruct-Core', 'MomStruct-Extension'

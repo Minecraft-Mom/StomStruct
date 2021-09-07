@@ -1,0 +1,5 @@
+/.gradle/
+/.idea/
+
+/MomStruct-Core/build/
+/MomStruct-Extension/build/
