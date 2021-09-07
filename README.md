@@ -7,6 +7,27 @@ Features
  - Writing structures to a structure block file
  - Building structures at a given point in an instance
  - Creating structures from a region of space
+ - In-game commands for easy use of structures
+
+Usage
+---
+### Extension
+The latest extension jarfile can be found under releases. The extension enables the structure commands, and shadows in the core library.
+
+### Library
+Gradle
+```
+repositories {
+    // ...
+    maven { url 'https://repo.spongepowered.org/maven' }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    // ...
+    implementation 'com.github.ethan-spangler:MomStruct:master-SNAPSHOT'
+}
+```
 
 To-Do
 ---
