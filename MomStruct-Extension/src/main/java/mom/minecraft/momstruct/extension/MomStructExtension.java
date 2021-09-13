@@ -11,9 +11,10 @@ import net.minestom.server.extensions.Extension;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MomStructExtension extends Extension {
-    public static HashMap<UUID, VanillaStructure> playerLoadedStructures;
+    public static ConcurrentHashMap<UUID, VanillaStructure> playerLoadedStructures;
 
     public static EventNode<PlayerEvent> events() {
         EventNode<PlayerEvent> node = EventNode.type("player-structure-events", EventFilter.PLAYER);
@@ -29,7 +30,7 @@ public class MomStructExtension extends Extension {
     public void initialize() {
         System.out.println("MomStruct Extension initializing");
 
-        playerLoadedStructures = new HashMap<>();
+        playerLoadedStructures = new ConcurrentHashMap<>();
 
         getEventNode().addChild(events());
 
