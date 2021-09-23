@@ -31,7 +31,8 @@ dependencies {
 
 To-Do
 ---
- - [ ] Apply block NBT when building a structure
+ - [🚧] Apply block NBT when building a structure
  - [ ] Entities when creating and loading structures
  - [ ] Fix Structure Void blocks on structure creation
+ - [ ] Add support for Sponge Schematics
  - [ ] Maybe: Load/Create structures from actual Structure Block
