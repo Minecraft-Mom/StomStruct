@@ -1,2 +1,2 @@
-rootProject.name = 'MomStruct'
-include 'MomStruct-Core', 'MomStruct-Extension'
+rootProject.name = 'StomStruct'
+include 'StomStruct-Core', 'StomStruct-Extension'

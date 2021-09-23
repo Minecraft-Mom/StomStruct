@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-group 'mom.minecraft.momstruct'
+group 'mom.minecraft.stomstruct'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -15,7 +15,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    implementation 'com.github.Minestom:Minestom:master-SNAPSHOT'
+    implementation 'com.github.Minestom:Minestom:68107c9a90'
 }
 
 gradle.projectsEvaluated {

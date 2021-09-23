@@ -1,14 +1,16 @@
-package mom.minecraft.momstruct.extension.Commands;
+package mom.minecraft.stomstruct.extension.commands;
 
-import mom.minecraft.momstruct.core.structure.AbstractStructure;
-import mom.minecraft.momstruct.core.structure.VanillaStructure;
-import mom.minecraft.momstruct.extension.MomStructExtension;
+import mom.minecraft.stomstruct.core.structure.Structure;
+import mom.minecraft.stomstruct.core.structure.StructureFormatException;
+import mom.minecraft.stomstruct.extension.StomStructExtension;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
 import net.minestom.server.entity.Player;
+
+import java.io.IOException;
 
 public class StructureCommand extends Command {
     public StructureCommand() {
@@ -22,7 +24,7 @@ public class StructureCommand extends Command {
 
 
         setDefaultExecutor(((sender, context) -> {
-            sender.sendMessage("Structures directory: \"" + VanillaStructure.STRUCTURE_DIRECTORY + "\"");
+            sender.sendMessage("Structures directory: \"" + StomStructExtension.STRUCTURE_DIR + "\"");
             sender.sendMessage("/" + context.getCommandName() + " load <path>: Load a structure file to your clipboard");
             sender.sendMessage("/" + context.getCommandName() + " save: Save structure from your clipboard to file");
             sender.sendMessage("/" + context.getCommandName() + " build: Build structure from your clipboard");
@@ -35,45 +37,23 @@ public class StructureCommand extends Command {
 
             switch(context.get(actionArgument)) {
                 case INFO:
-                    if (MomStructExtension.playerLoadedStructures.containsKey(player.getUuid())) {
-                        VanillaStructure structure = MomStructExtension.playerLoadedStructures.get(player.getUuid());
+                    if (StomStructExtension.playerLoadedStructures.containsKey(player.getUuid())) {
+                        Structure structure = StomStructExtension.playerLoadedStructures.get(player.getUuid());
                         player.sendMessage("Structure Info:");
-                        player.sendMessage("    File: " + structure.getStructureFilePath());
-                        player.sendMessage("  Status: " + structure.getStatus());
                         player.sendMessage("    Size: " + structure.getWidth() + ", " + structure.getHeight() + ", " + structure.getLength());
                         player.sendMessage("  Blocks: " + structure.getBlockCount());
                         player.sendMessage("Palettes: " + structure.getPaletteCount());
-                        player.sendMessage(" Version: " + structure.getDataVersion());
                     }
                     break;
 
                 case BUILD:
-                    if (MomStructExtension.playerLoadedStructures.containsKey(player.getUuid())) {
-                        VanillaStructure structure = MomStructExtension.playerLoadedStructures.get(player.getUuid());
-                        if (structure.getStatus() != AbstractStructure.Status.LOADED)
-                            player.sendMessage("Error: Structure Status: " + structure.getStatus());
-                        else
-                        {
-                            structure.build(player.getPosition(), player.getInstance());
-                        }
+                    if (StomStructExtension.playerLoadedStructures.containsKey(player.getUuid())) {
+                        Structure structure = StomStructExtension.playerLoadedStructures.get(player.getUuid());
+                        structure.build(player.getPosition(), player.getInstance());
                     }
                     break;
 
                 case SAVE:
-                    if (MomStructExtension.playerLoadedStructures.containsKey(player.getUuid())) {
-                        VanillaStructure structure = MomStructExtension.playerLoadedStructures.get(player.getUuid());
-                        if (structure.getStatus() != AbstractStructure.Status.LOADED)
-                            player.sendMessage("Error: Structure Status: " + structure.getStatus());
-                        else
-                        {
-                            structure.write();
-                            if (structure.getStatus() == AbstractStructure.Status.BAD_WRITE)
-                                player.sendMessage("Error: Structure Status: " + structure.getStatus());
-                            else
-                                player.sendMessage("Structure written to disk");
-                        }
-                    }
-                    break;
                 case CREATE:
                 case LOAD:
                     player.sendMessage("Invalid Command Syntax");
@@ -83,17 +63,29 @@ public class StructureCommand extends Command {
 
         addSyntax((sender, context) -> {
             Player player = sender.asPlayer();
+            String path = context.get(pathArgument);
 
             switch(context.get(actionArgument)) {
                 case LOAD:
-                    VanillaStructure structure = new VanillaStructure(context.get(pathArgument));
-                    MomStructExtension.playerLoadedStructures.put(player.getUuid(), structure);
-                    structure.read();
-                    if (structure.getStatus() != AbstractStructure.Status.LOADED)
-                        player.sendMessage("Error: Structure Status: " + structure.getStatus());
-                    else
-                        player.sendMessage("Structure loaded from disk");
+                    try {
+                        Structure structure = StomStructExtension.structureReader.read(path);
+                        StomStructExtension.playerLoadedStructures.put(player.getUuid(), structure);
+                    } catch (StructureFormatException | IOException e) {
+                        player.sendMessage(e.getMessage());
+                    }
+                    break;
 
+                case SAVE:
+                    if (StomStructExtension.playerLoadedStructures.containsKey(player.getUuid())) {
+                        Structure structure = StomStructExtension.playerLoadedStructures.get(player.getUuid());
+
+                        try {
+                            StomStructExtension.structureWriter.write(structure, path);
+                            player.sendMessage("Structure written to disk");
+                        } catch (IOException e) {
+                            player.sendMessage(e.getMessage());
+                        }
+                    }
                     break;
 
                 case INFO:
@@ -109,12 +101,11 @@ public class StructureCommand extends Command {
 
             switch (context.get(actionArgument)) {
                 case CREATE:
-                    VanillaStructure s = new VanillaStructure(
+                    Structure s = new Structure(
                             context.get(pos1Argument).from(player),
                             context.get(pos2Argument).from(player),
-                            player.getInstance(),
-                            context.get(pathArgument));
-                    MomStructExtension.playerLoadedStructures.put(player.getUuid(), s);
+                            player.getInstance());
+                    StomStructExtension.playerLoadedStructures.put(player.getUuid(), s);
                     break;
 
                 case INFO:

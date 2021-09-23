@@ -1,7 +1,11 @@
-package mom.minecraft.momstruct.extension;
+package mom.minecraft.stomstruct.extension;
 
-import mom.minecraft.momstruct.core.structure.VanillaStructure;
-import mom.minecraft.momstruct.extension.Commands.StructureCommand;
+import mom.minecraft.stomstruct.core.io.IStructureReader;
+import mom.minecraft.stomstruct.core.io.IStructureWriter;
+import mom.minecraft.stomstruct.core.io.VanillaStructureReader;
+import mom.minecraft.stomstruct.core.io.VanillaStructureWriter;
+import mom.minecraft.stomstruct.core.structure.Structure;
+import mom.minecraft.stomstruct.extension.commands.StructureCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -9,12 +13,16 @@ import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.extensions.Extension;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MomStructExtension extends Extension {
-    public static ConcurrentHashMap<UUID, VanillaStructure> playerLoadedStructures;
+public class StomStructExtension extends Extension {
+    public static final String STRUCTURE_DIR = "./structures/";
+
+    public static IStructureReader structureReader = new VanillaStructureReader();
+    public static IStructureWriter structureWriter = new VanillaStructureWriter();
+
+    public static ConcurrentHashMap<UUID, Structure> playerLoadedStructures;
 
     public static EventNode<PlayerEvent> events() {
         EventNode<PlayerEvent> node = EventNode.type("player-structure-events", EventFilter.PLAYER);
