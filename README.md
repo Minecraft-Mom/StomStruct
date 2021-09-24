@@ -1,5 +1,5 @@
 # StomStruct
- StomStruct is a library and extension for Minestom enabling interaction with structure block files. It is intended to be used in situations where a server developer may want to load multi-block structures to memory, build these structures in an instance, or save a region of an instance to disk.
+ StomStruct is a library and extension for Minestom enabling interaction with structure block schematic files. It is intended to be used in situations where a server developer may want to load multi-block structures or schematics to memory, build these structures in an instance, or save a region of an instance to a permanent data store.
 
 Features
 ---
@@ -31,11 +31,11 @@ dependencies {
 
 To-Do
 ---
- [:construction:] Apply block NBT when building a structure
+ [:heavy_check_mark:] ~~Apply block NBT when building a structure~~
+ 
+ [:heavy_check_mark:] ~~Fix Structure Void blocks on structure creation~~
  
  [:x:] Entities when creating and loading structures
- 
- [:x:] Fix Structure Void blocks on structure creation
  
  [:x:] Add support for Sponge Schematics
  
