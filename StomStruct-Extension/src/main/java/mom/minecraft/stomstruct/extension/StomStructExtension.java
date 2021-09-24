@@ -7,6 +7,7 @@ import mom.minecraft.stomstruct.core.io.VanillaStructureWriter;
 import mom.minecraft.stomstruct.core.structure.Structure;
 import mom.minecraft.stomstruct.extension.commands.StructureCommand;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
@@ -22,6 +23,8 @@ public class StomStructExtension extends Extension {
     public static IStructureReader structureReader = new VanillaStructureReader();
     public static IStructureWriter structureWriter = new VanillaStructureWriter();
 
+    public static Command structureCommand = new StructureCommand();
+
     public static ConcurrentHashMap<UUID, Structure> playerLoadedStructures;
 
     public static EventNode<PlayerEvent> events() {
@@ -35,6 +38,11 @@ public class StomStructExtension extends Extension {
     }
 
     @Override
+    public void preInitialize() {
+
+    }
+
+    @Override
     public void initialize() {
         System.out.println("MomStruct Extension initializing");
 
@@ -42,11 +50,17 @@ public class StomStructExtension extends Extension {
 
         getEventNode().addChild(events());
 
-        MinecraftServer.getCommandManager().register(new StructureCommand());
+        MinecraftServer.getCommandManager().register(structureCommand);
+    }
+
+    @Override
+    public void postInitialize() {
+
     }
 
     @Override
     public void terminate() {
         playerLoadedStructures.clear();
+        MinecraftServer.getCommandManager().unregister(structureCommand);
     }
 }

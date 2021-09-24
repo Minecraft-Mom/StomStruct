@@ -1,7 +1,6 @@
 package mom.minecraft.stomstruct.core.io;
 
 import mom.minecraft.stomstruct.core.structure.Structure;
-import mom.minecraft.stomstruct.core.structure.StructureFormatException;
 import net.minestom.server.instance.block.Block;
 import org.jglrxavpok.hephaistos.nbt.*;
 
@@ -11,14 +10,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Reads NBT structure files compatible with vanilla structure blocks.
+ */
 public class VanillaStructureReader implements IStructureReader {
 
     @Override
     public Structure read(String path) throws StructureFormatException, IOException {
 
         int blockCount;
-        int[][] blockPositions;
-        int[] blockStates;
+        short[][] blockPositions;
+        short[] blockStates;
         NBTCompound[] blockNBT;
 
         int paletteCount;
@@ -63,8 +65,8 @@ public class VanillaStructureReader implements IStructureReader {
             length = structureSize.get(2).getValue();
 
             // Initialize arrays for structure data
-            blockPositions = new int[blockCount][3];
-            blockStates = new int[blockCount];
+            blockPositions = new short[blockCount][3];
+            blockStates = new short[blockCount];
             blockStatePalettes = new Block[paletteCount][];
             blockNBT = new NBTCompound[blockCount];
 
@@ -73,15 +75,18 @@ public class VanillaStructureReader implements IStructureReader {
             {
                 NBTCompound structureBlock = structureBlocks.get(i);
                 NBTList<NBTInt> pos = structureBlock.getList("pos");
-                blockPositions[i] = new int[3];
+                blockPositions[i] = new short[3];
                 for (int j = 0; j < 3; j++)
                 {
-                    blockPositions[i][j] = pos.get(j).getValue();
+                    blockPositions[i][j] = (short) pos.get(j).getValue();
                 }
-                blockStates[i] = structureBlock.getInt("state");
+                blockStates[i] = structureBlock.getAsShort("state");
 
                 if (structureBlock.containsKey("nbt"))
+                {
                     blockNBT[i] = structureBlock.getCompound("nbt");
+                    System.out.println(blockNBT[i].toSNBT());
+                }
             }
 
             // Load in all palette block data

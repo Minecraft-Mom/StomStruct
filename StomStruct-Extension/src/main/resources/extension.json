@@ -1,5 +1,5 @@
 {
   "entrypoint": "mom.minecraft.stomstruct.extension.StomStructExtension",
-  "name": "StomStructExtension",
+  "name": "StomStruct",
   "version": "1.0.0"
 }

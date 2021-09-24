@@ -1,7 +1,7 @@
 package mom.minecraft.stomstruct.extension.commands;
 
 import mom.minecraft.stomstruct.core.structure.Structure;
-import mom.minecraft.stomstruct.core.structure.StructureFormatException;
+import mom.minecraft.stomstruct.core.io.StructureFormatException;
 import mom.minecraft.stomstruct.extension.StomStructExtension;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
@@ -68,7 +68,7 @@ public class StructureCommand extends Command {
             switch(context.get(actionArgument)) {
                 case LOAD:
                     try {
-                        Structure structure = StomStructExtension.structureReader.read(path);
+                        Structure structure = StomStructExtension.structureReader.read(StomStructExtension.STRUCTURE_DIR + path);
                         StomStructExtension.playerLoadedStructures.put(player.getUuid(), structure);
                     } catch (StructureFormatException | IOException e) {
                         player.sendMessage(e.getMessage());
@@ -80,7 +80,7 @@ public class StructureCommand extends Command {
                         Structure structure = StomStructExtension.playerLoadedStructures.get(player.getUuid());
 
                         try {
-                            StomStructExtension.structureWriter.write(structure, path);
+                            StomStructExtension.structureWriter.write(structure, StomStructExtension.STRUCTURE_DIR + path);
                             player.sendMessage("Structure written to disk");
                         } catch (IOException e) {
                             player.sendMessage(e.getMessage());

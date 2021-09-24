@@ -7,10 +7,13 @@ import org.jglrxavpok.hephaistos.nbt.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Writes NBT structure files compatible with vanilla structure blocks.
+ */
 public class VanillaStructureWriter implements IStructureWriter{
+
     @Override
     public void write(Structure structure, String path) throws IOException {
-
 
         NBTList<NBTCompound> structureBlocks = new NBTList<>(NBTTypes.TAG_Compound);
         NBTList<NBTCompound> structureEntities = new NBTList<>(NBTTypes.TAG_Compound);
