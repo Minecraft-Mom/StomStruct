@@ -44,7 +44,7 @@ public class StomStructExtension extends Extension {
 
     @Override
     public void initialize() {
-        System.out.println("MomStruct Extension initializing");
+        System.out.println("StomStruct Extension initializing");
 
         playerLoadedStructures = new ConcurrentHashMap<>();
 
